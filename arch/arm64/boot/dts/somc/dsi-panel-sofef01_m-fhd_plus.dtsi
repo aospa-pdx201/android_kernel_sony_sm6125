@@ -22,6 +22,7 @@
 	dsi_6: somc,6_panel {
 		qcom,mdss-dsi-panel-name = "6";
 		qcom,mdss-dsi-panel-type = "dsi_cmd_mode";
+		qcom,mdss-dsi-panel-physical-type = "oled";
 		qcom,mdss-pan-physical-width-dimension = <60>;
 		qcom,mdss-pan-physical-height-dimension = <139>;
 		qcom,mdss-dsi-virtual-channel-id = <0>;
