@@ -27,6 +27,7 @@
 #include "dsi_panel_driver.h"
 #include "dsi_display.h"
 #include "dsi_panel.h"
+#include "sec_interface.h"
 
 static BLOCKING_NOTIFIER_HEAD(drm_notifier_list);
 
