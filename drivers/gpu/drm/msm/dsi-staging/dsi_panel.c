@@ -4079,6 +4079,7 @@ exit:
 int dsi_panel_set_nolp(struct dsi_panel *panel)
 {
 	int rc = 0;
+	int bl_lvl = 0;
 
 	if (!panel) {
 		pr_err("invalid params\n");
@@ -4098,6 +4099,13 @@ int dsi_panel_set_nolp(struct dsi_panel *panel)
 		dsi_pwr_panel_regulator_mode_set(&panel->power_info,
 			"ibb", REGULATOR_MODE_NORMAL);
 	rc = dsi_panel_tx_cmd_set(panel, DSI_CMD_SET_NOLP);
+
+	// Force setting a valid brightness level
+	bl_lvl = dsi_panel_get_backlight(panel);
+	pr_notice("%s: Force setting a dsi panel brightness to %d", __func__,
+		  bl_lvl);
+	dsi_panel_set_backlight(panel, bl_lvl);
+
 	if (rc)
 		pr_err("[%s] failed to send DSI_CMD_SET_NOLP cmd, rc=%d\n",
 		       panel->name, rc);
