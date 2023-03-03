@@ -12,6 +12,11 @@
  *  option) any later version.
  *
  */
+/*
+ * NOTE: This file has been modified by Sony Corporation.
+ * Modifications are Copyright 2015 Sony Corporation,
+ * and licensed under the license of the file.
+ */
 
 #include <linux/kernel.h>
 #include <linux/init.h>
@@ -2257,6 +2262,22 @@ int regulator_enable(struct regulator *regulator)
 	return ret;
 }
 EXPORT_SYMBOL_GPL(regulator_enable);
+
+/**
+ * regulator_get_ref_cnt - get reference count
+ * @regulator: regulator source
+ *
+ */
+int regulator_get_ref_cnt(struct regulator *regulator)
+{
+	int ret = -1;
+
+	if (regulator)
+		ret = regulator->rdev->use_count;
+
+	return ret;
+}
+EXPORT_SYMBOL_GPL(regulator_get_ref_cnt);
 
 static int _regulator_do_disable(struct regulator_dev *rdev)
 {

@@ -313,10 +313,10 @@ static void va_macro_tx_hpf_corner_freq_callback(struct work_struct *work)
 
 	snd_soc_update_bits(codec, dec_cfg_reg, TX_HPF_CUT_OFF_FREQ_MASK,
 			    hpf_cut_off_freq << 5);
-	snd_soc_update_bits(codec, hpf_gate_reg, 0x03, 0x02);
+	snd_soc_update_bits(codec, hpf_gate_reg, 0x02, 0x02);  //03, 0x02 -> 0x02, 0x02
 	/* Minimum 1 clk cycle delay is required as per HW spec */
 	usleep_range(1000, 1010);
-	snd_soc_update_bits(codec, hpf_gate_reg, 0x03, 0x01);
+	snd_soc_update_bits(codec, hpf_gate_reg, 0x02, 0x00);  // 0x03, 0x01 -> 0x02, 0x00
 }
 
 static void va_macro_mute_update_callback(struct work_struct *work)
@@ -572,6 +572,11 @@ static int va_macro_enable_dec(struct snd_soc_dapm_widget *w,
 		snd_soc_update_bits(codec, tx_vol_ctl_reg, 0x20, 0x20);
 		snd_soc_update_bits(codec, hpf_gate_reg, 0x01, 0x00);
 
+	/*
+     * Minimum 1 clk cycle delay is required as per HW spec
+     */
+    usleep_range(1000, 1010);
+
 		hpf_cut_off_freq = (snd_soc_read(codec, dec_cfg_reg) &
 				   TX_HPF_CUT_OFF_FREQ_MASK) >> 5;
 		va_priv->va_hpf_work[decimator].hpf_cut_off_freq =
@@ -581,7 +586,7 @@ static int va_macro_enable_dec(struct snd_soc_dapm_widget *w,
 			snd_soc_update_bits(codec, dec_cfg_reg,
 					    TX_HPF_CUT_OFF_FREQ_MASK,
 					    CF_MIN_3DB_150HZ << 5);
-			snd_soc_update_bits(codec, hpf_gate_reg, 0x02, 0x02);
+			snd_soc_update_bits(codec, hpf_gate_reg, 0x03, 0x03); // 0x02, 0x02
 			/*
 			 * Minimum 1 clk cycle delay is required as per HW spec
 			 */

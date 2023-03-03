@@ -93,6 +93,7 @@ struct npu_network {
 	bool is_active;
 	bool is_unloading;
 	bool fw_error;
+	bool is_async;
 	struct npu_client *client;
 	struct list_head cmd_list;
 };

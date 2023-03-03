@@ -11,6 +11,11 @@
  * GNU General Public License for more details.
  *
  */
+/*
+ * NOTE: This file has been modified by Sony Corporation.
+ * Modifications are Copyright 2021 Sony Corporation,
+ * and licensed under the license of the file.
+ */
 
 
 #define pr_fmt(fmt)	"dsi-drm:[%s] " fmt, __func__
@@ -830,6 +835,8 @@ int dsi_connector_get_modes(struct drm_connector *connector, void *data)
 	struct drm_display_mode drm_mode;
 	struct dsi_display *display = data;
 	struct edid edid;
+	unsigned int width_mm = connector->display_info.width_mm;
+	unsigned int height_mm = connector->display_info.height_mm;
 	const u8 edid_buf[EDID_LENGTH] = {
 		0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x44, 0x6D,
 		0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x1B, 0x10, 0x01, 0x03,
@@ -896,6 +903,14 @@ int dsi_connector_get_modes(struct drm_connector *connector, void *data)
 	rc = drm_mode_connector_update_edid_property(connector, &edid);
 	if (rc)
 		count = 0;
+	/*
+	 * DRM EDID structure maintains panel physical dimensions in
+	 * centimeters, we will be losing the precision anything below cm.
+	 * Changing DRM framework will effect other clients at this
+	 * moment, overriding the values back to millimeter.
+	 */
+	connector->display_info.width_mm = width_mm;
+	connector->display_info.height_mm = height_mm;
 end:
 	pr_debug("MODE COUNT =%d\n\n", count);
 	return count;
