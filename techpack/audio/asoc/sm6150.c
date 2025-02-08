@@ -2990,8 +2990,8 @@ static int mi2s_get_port_idx(struct snd_kcontrol *kcontrol)
 {
 	int idx;
 
-	if (strnstr(kcontrol->id.name, "PRIM_MI2S_RX",
-	    sizeof("PRIM_MI2S_RX"))) {
+	if (strnstr(kcontrol->id.name, "PRI_MI2S_RX",
+	    sizeof("PRI_MI2S_RX"))) {
 		idx = PRIM_MI2S;
 	} else if (strnstr(kcontrol->id.name, "SEC_MI2S_RX",
 		 sizeof("SEC_MI2S_RX"))) {
@@ -3005,8 +3005,8 @@ static int mi2s_get_port_idx(struct snd_kcontrol *kcontrol)
 	} else if (strnstr(kcontrol->id.name, "QUIN_MI2S_RX",
 		 sizeof("QUIN_MI2S_RX"))) {
 		idx = QUIN_MI2S;
-	} else if (strnstr(kcontrol->id.name, "PRIM_MI2S_TX",
-		 sizeof("PRIM_MI2S_TX"))) {
+	} else if (strnstr(kcontrol->id.name, "PRI_MI2S_TX",
+		 sizeof("PRI_MI2S_TX"))) {
 		idx = PRIM_MI2S;
 	} else if (strnstr(kcontrol->id.name, "SEC_MI2S_TX",
 		 sizeof("SEC_MI2S_TX"))) {
@@ -3763,7 +3763,7 @@ static const struct snd_kcontrol_new msm_common_snd_controls[] = {
 	SOC_ENUM_EXT("QUIN_AUX_PCM_TX SampleRate", quin_aux_pcm_tx_sample_rate,
 			aux_pcm_tx_sample_rate_get,
 			aux_pcm_tx_sample_rate_put),
-	SOC_ENUM_EXT("PRIM_MI2S_RX SampleRate", prim_mi2s_rx_sample_rate,
+	SOC_ENUM_EXT("PRI_MI2S_RX SampleRate", prim_mi2s_rx_sample_rate,
 			mi2s_rx_sample_rate_get,
 			mi2s_rx_sample_rate_put),
 	SOC_ENUM_EXT("SEC_MI2S_RX SampleRate", sec_mi2s_rx_sample_rate,
@@ -3778,7 +3778,7 @@ static const struct snd_kcontrol_new msm_common_snd_controls[] = {
 	SOC_ENUM_EXT("QUIN_MI2S_RX SampleRate", quin_mi2s_rx_sample_rate,
 			mi2s_rx_sample_rate_get,
 			mi2s_rx_sample_rate_put),
-	SOC_ENUM_EXT("PRIM_MI2S_TX SampleRate", prim_mi2s_tx_sample_rate,
+	SOC_ENUM_EXT("PRI_MI2S_TX SampleRate", prim_mi2s_tx_sample_rate,
 			mi2s_tx_sample_rate_get,
 			mi2s_tx_sample_rate_put),
 	SOC_ENUM_EXT("SEC_MI2S_TX SampleRate", sec_mi2s_tx_sample_rate,
@@ -3793,9 +3793,9 @@ static const struct snd_kcontrol_new msm_common_snd_controls[] = {
 	SOC_ENUM_EXT("QUIN_MI2S_TX SampleRate", quin_mi2s_tx_sample_rate,
 			mi2s_tx_sample_rate_get,
 			mi2s_tx_sample_rate_put),
-	SOC_ENUM_EXT("PRIM_MI2S_RX Channels", prim_mi2s_rx_chs,
+	SOC_ENUM_EXT("PRI_MI2S_RX Channels", prim_mi2s_rx_chs,
 			msm_mi2s_rx_ch_get, msm_mi2s_rx_ch_put),
-	SOC_ENUM_EXT("PRIM_MI2S_TX Channels", prim_mi2s_tx_chs,
+	SOC_ENUM_EXT("PRI_MI2S_TX Channels", prim_mi2s_tx_chs,
 			msm_mi2s_tx_ch_get, msm_mi2s_tx_ch_put),
 	SOC_ENUM_EXT("SEC_MI2S_RX Channels", sec_mi2s_rx_chs,
 			msm_mi2s_rx_ch_get, msm_mi2s_rx_ch_put),
@@ -3813,9 +3813,9 @@ static const struct snd_kcontrol_new msm_common_snd_controls[] = {
 			msm_mi2s_rx_ch_get, msm_mi2s_rx_ch_put),
 	SOC_ENUM_EXT("QUIN_MI2S_TX Channels", quin_mi2s_tx_chs,
 			msm_mi2s_tx_ch_get, msm_mi2s_tx_ch_put),
-	SOC_ENUM_EXT("PRIM_MI2S_RX Format", mi2s_rx_format,
+	SOC_ENUM_EXT("PRI_MI2S_RX Format", mi2s_rx_format,
 			msm_mi2s_rx_format_get, msm_mi2s_rx_format_put),
-	SOC_ENUM_EXT("PRIM_MI2S_TX Format", mi2s_tx_format,
+	SOC_ENUM_EXT("PRI_MI2S_TX Format", mi2s_tx_format,
 			msm_mi2s_tx_format_get, msm_mi2s_tx_format_put),
 	SOC_ENUM_EXT("SEC_MI2S_RX Format", mi2s_rx_format,
 			msm_mi2s_rx_format_get, msm_mi2s_rx_format_put),
@@ -5183,7 +5183,7 @@ static void *def_wcd_mbhc_cal(void)
 		return NULL;
 
 #define S(X, Y) ((WCD_MBHC_CAL_PLUG_TYPE_PTR(wcd_mbhc_cal)->X) = (Y))
-	S(v_hs_max, 1600);
+	S(v_hs_max, 1700);
 #undef S
 #define S(X, Y) ((WCD_MBHC_CAL_BTN_DET_PTR(wcd_mbhc_cal)->X) = (Y))
 	S(num_btn, WCD_MBHC_DEF_BUTTONS);
@@ -5194,7 +5194,7 @@ static void *def_wcd_mbhc_cal(void)
 		(sizeof(btn_cfg->_v_btn_low[0]) * btn_cfg->num_btn);
 
 	btn_high[0] = 75;
-	btn_high[1] = 150;
+	btn_high[1] = 137;
 	btn_high[2] = 237;
 	btn_high[3] = 500;
 	btn_high[4] = 500;
@@ -5847,6 +5847,10 @@ static int msm_mi2s_snd_startup(struct snd_pcm_substream *substream)
 	unsigned int fmt = SND_SOC_DAIFMT_CBS_CFS;
 	struct snd_soc_card *card = rtd->card;
 	struct msm_asoc_mach_data *pdata = snd_soc_card_get_drvdata(card);
+	struct snd_soc_dai *codec_dai = rtd->codec_dai;
+	struct snd_soc_codec *codec = codec_dai->codec;
+	struct snd_soc_dai **codec_dais = rtd->codec_dais;
+	int i;
 
 	dev_dbg(rtd->card->dev,
 		"%s: substream = %s  stream = %d, dai name %s, dai ID %d\n",
@@ -5907,6 +5911,19 @@ static int msm_mi2s_snd_startup(struct snd_pcm_substream *substream)
 		if (pdata->mi2s_gpio_p[index])
 			msm_cdc_pinctrl_select_active_state(
 					pdata->mi2s_gpio_p[index]);
+		for (i = 0; i < rtd->num_codecs; i++) {
+			codec = codec_dais[i]->codec;
+			ret = snd_soc_dai_set_fmt(codec_dais[i],
+					SND_SOC_DAIFMT_CBS_CFS |
+					SND_SOC_DAIFMT_I2S);
+			ret = snd_soc_codec_set_sysclk(codec, 0, 0,
+					mi2s_clk[index].clk_freq_in_hz,
+					SND_SOC_CLOCK_IN);
+			if (ret < 0)
+				pr_err("%s: set sysclk failed, err:%d\n",
+					__func__, ret);
+			ret = 0;
+		}
 	}
 clk_off:
 	if (ret < 0)
@@ -6712,8 +6729,13 @@ static struct snd_soc_dai_link msm_bolero_fe_dai_links[] = {
 		.stream_name = "WSA CDC DMA0 Capture",
 		.cpu_dai_name = "msm-dai-cdc-dma-dev.45057",
 		.platform_name = "msm-pcm-hostless",
+#ifdef ENABLE_WSA
 		.codec_name = "bolero_codec",
 		.codec_dai_name = "wsa_macro_vifeedback",
+#else
+		.codec_dai_name = "snd-soc-dummy-dai",
+		.codec_name = "snd-soc-dummy",
+#endif
 		.id = MSM_BACKEND_DAI_WSA_CDC_DMA_TX_0,
 		.be_hw_params_fixup = msm_be_hw_params_fixup,
 		.ignore_suspend = 1,
@@ -7553,14 +7575,50 @@ static struct snd_soc_dai_link ext_disp_be_dai_link[] = {
 	},
 };
 
+static int cirrus_init(struct snd_soc_pcm_runtime *rtd)
+{
+	int i;
+	struct snd_soc_dai **codec_dais = rtd->codec_dais;
+	struct snd_soc_dapm_context *dapm;
+
+	for (i = 0; i < rtd->num_codecs; i++) {
+		dapm = snd_soc_codec_get_dapm(codec_dais[i]->codec);
+		if (dapm->component->name_prefix == NULL) {
+			snd_soc_dapm_ignore_suspend(dapm, "AMP Playback");
+			snd_soc_dapm_ignore_suspend(dapm, "AMP Capture");
+			snd_soc_dapm_ignore_suspend(dapm, "SPK");
+		} else {
+			if (!strcmp(dapm->component->name_prefix, "L")) {
+				snd_soc_dapm_ignore_suspend(dapm, "L AMP Playback");
+				snd_soc_dapm_ignore_suspend(dapm, "L AMP Capture");
+				snd_soc_dapm_ignore_suspend(dapm, "L SPK");
+			} else if (!strcmp(dapm->component->name_prefix, "R")) {
+				snd_soc_dapm_ignore_suspend(dapm, "R AMP Playback");
+				snd_soc_dapm_ignore_suspend(dapm, "R AMP Capture");
+				snd_soc_dapm_ignore_suspend(dapm, "R SPK");
+			}
+		}
+	}
+	snd_soc_dapm_sync(dapm);
+
+	return 0;
+}
+
+static struct snd_soc_dai_link_component cirrus_spk[] = {
+	{
+		.name = "cs35l41.2-0040",
+		.dai_name = "cs35l41-pcm",
+	},
+};
+
 static struct snd_soc_dai_link msm_mi2s_be_dai_links[] = {
 	{
 		.name = LPASS_BE_PRI_MI2S_RX,
 		.stream_name = "Primary MI2S Playback",
 		.cpu_dai_name = "msm-dai-q6-mi2s.0",
 		.platform_name = "msm-pcm-routing",
-		.codec_name = "msm-stub-codec.1",
-		.codec_dai_name = "msm-stub-rx",
+		.codecs = cirrus_spk,
+		.num_codecs = ARRAY_SIZE(cirrus_spk),
 		.no_pcm = 1,
 		.dpcm_playback = 1,
 		.id = MSM_BACKEND_DAI_PRI_MI2S_RX,
@@ -7568,14 +7626,15 @@ static struct snd_soc_dai_link msm_mi2s_be_dai_links[] = {
 		.ops = &msm_mi2s_be_ops,
 		.ignore_suspend = 1,
 		.ignore_pmdown_time = 1,
+        	.init = cirrus_init,
 	},
 	{
 		.name = LPASS_BE_PRI_MI2S_TX,
 		.stream_name = "Primary MI2S Capture",
 		.cpu_dai_name = "msm-dai-q6-mi2s.0",
 		.platform_name = "msm-pcm-routing",
-		.codec_name = "msm-stub-codec.1",
-		.codec_dai_name = "msm-stub-tx",
+		.codecs = cirrus_spk,
+		.num_codecs = ARRAY_SIZE(cirrus_spk),
 		.no_pcm = 1,
 		.dpcm_capture = 1,
 		.id = MSM_BACKEND_DAI_PRI_MI2S_TX,
@@ -7851,11 +7910,18 @@ static struct snd_soc_dai_link msm_wsa_cdc_dma_be_dai_links[] = {
 		.stream_name = "WSA CDC DMA0 Playback",
 		.cpu_dai_name = "msm-dai-cdc-dma-dev.45056",
 		.platform_name = "msm-pcm-routing",
+#ifdef ENABLE_WSA
 		.codec_name = "bolero_codec",
 		.codec_dai_name = "wsa_macro_rx1",
+#else
+		.codec_dai_name = "snd-soc-dummy-dai",
+		.codec_name = "snd-soc-dummy",
+#endif
 		.no_pcm = 1,
 		.dpcm_playback = 1,
+#ifdef ENABLE_WSA
 		.init = &msm_int_audrx_init,
+#endif
 		.id = MSM_BACKEND_DAI_WSA_CDC_DMA_RX_0,
 		.be_hw_params_fixup = msm_be_hw_params_fixup,
 		.ignore_pmdown_time = 1,
@@ -7867,8 +7933,13 @@ static struct snd_soc_dai_link msm_wsa_cdc_dma_be_dai_links[] = {
 		.stream_name = "WSA CDC DMA1 Playback",
 		.cpu_dai_name = "msm-dai-cdc-dma-dev.45058",
 		.platform_name = "msm-pcm-routing",
+#ifdef ENABLE_WSA
 		.codec_name = "bolero_codec",
 		.codec_dai_name = "wsa_macro_rx_mix",
+#else
+		.codec_dai_name = "snd-soc-dummy-dai",
+		.codec_name = "snd-soc-dummy",
+#endif
 		.no_pcm = 1,
 		.dpcm_playback = 1,
 		.id = MSM_BACKEND_DAI_WSA_CDC_DMA_RX_1,
@@ -7882,8 +7953,13 @@ static struct snd_soc_dai_link msm_wsa_cdc_dma_be_dai_links[] = {
 		.stream_name = "WSA CDC DMA1 Capture",
 		.cpu_dai_name = "msm-dai-cdc-dma-dev.45059",
 		.platform_name = "msm-pcm-routing",
+#ifdef ENABLE_WSA
 		.codec_name = "bolero_codec",
 		.codec_dai_name = "wsa_macro_echo",
+#else
+		.codec_dai_name = "snd-soc-dummy-dai",
+		.codec_name = "snd-soc-dummy",
+#endif
 		.no_pcm = 1,
 		.dpcm_capture = 1,
 		.id = MSM_BACKEND_DAI_WSA_CDC_DMA_TX_1,
@@ -7904,6 +7980,9 @@ static struct snd_soc_dai_link msm_rx_tx_cdc_dma_be_dai_links[] = {
 		.codec_dai_name = "rx_macro_rx1",
 		.no_pcm = 1,
 		.dpcm_playback = 1,
+#ifndef ENABLE_WSA
+		.init = &msm_int_audrx_init,
+#endif
 		.id = MSM_BACKEND_DAI_RX_CDC_DMA_RX_0,
 		.be_hw_params_fixup = msm_be_hw_params_fixup,
 		.ignore_pmdown_time = 1,
@@ -8832,6 +8911,7 @@ codec_aux_dev:
 aux_dev_register:
 	card->num_aux_devs = wsa_max_devs + codec_max_aux_devs;
 	card->num_configs = wsa_max_devs + codec_max_aux_devs;
+	card->num_configs += 1;
 
 	/* Alloc array of AUX devs struct */
 	msm_aux_dev = devm_kcalloc(&pdev->dev, card->num_aux_devs,
@@ -8895,6 +8975,10 @@ aux_dev_register:
 		msm_codec_conf[wsa_max_devs + i].of_node =
 				aux_cdc_dev_info[i].of_node;
 	}
+
+	msm_codec_conf[card->num_configs - 1].dev_name = "cs35l41.2-0040";
+	msm_codec_conf[card->num_configs - 1].name_prefix = NULL;
+	msm_codec_conf[card->num_configs - 1].of_node = NULL;
 
 	card->codec_conf = msm_codec_conf;
 	card->aux_dev = msm_aux_dev;
