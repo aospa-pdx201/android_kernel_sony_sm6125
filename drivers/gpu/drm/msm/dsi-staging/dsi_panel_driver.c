@@ -502,10 +502,12 @@ int dsi_panel_driver_power_off(struct dsi_panel *panel)
 					__func__, rc);
 	}
 
-	if (gpio_is_valid(spec_pdata->reset_touch_gpio)) {
-		gpio_set_value(spec_pdata->reset_touch_gpio, 0);
-		usleep_range(spec_pdata->touch_reset_off * 1000,
-				spec_pdata->touch_reset_off * 1000 + 100);
+	if (!spec_pdata->pre_sod_mode) {
+		if (gpio_is_valid(spec_pdata->reset_touch_gpio)) {
+			gpio_set_value(spec_pdata->reset_touch_gpio, 0);
+			usleep_range(spec_pdata->touch_reset_off * 1000,
+						spec_pdata->touch_reset_off * 1000 + 100);
+		}
 	}
 
 	return rc;
@@ -532,6 +534,9 @@ int dsi_panel_driver_post_power_off(struct dsi_panel *panel)
 	}
 	spec_pdata = panel->spec_pdata;
 
+	if (spec_pdata->aod_mode == 1)
+		spec_pdata->aod_mode = 0;
+
 	if (spec_pdata->lp11_off) {
 		usleep_range(spec_pdata->lp11_off * 1000,
 				spec_pdata->lp11_off * 1000 + 100);
@@ -543,7 +548,8 @@ int dsi_panel_driver_post_power_off(struct dsi_panel *panel)
 			pr_warn("%s: Panel reset failed. rc=%d\n", __func__, rc);
 	}
 
-	dsi_panel_driver_touch_pinctrl_set_state(panel, false);
+	if (!spec_pdata->pre_sod_mode)
+		dsi_panel_driver_touch_pinctrl_set_state(panel, false);
 
 	rc = gpio_direction_output(spec_pdata->touch_vddh_en_gpio, 1);
 	if (rc)
@@ -1134,6 +1140,51 @@ static ssize_t dsi_panel_driver_hbm_mode_show(struct device *dev,
 	return scnprintf(buf, PAGE_SIZE, "%u", display->panel->spec_pdata->hbm_mode);
 }
 
+static ssize_t dsi_panel_pre_sod_mode_store(struct device *dev,
+		struct device_attribute *attr, const char *buf, size_t count)
+{
+	int mode;
+	struct panel_specific_pdata *spec_pdata = NULL;
+	struct dsi_display *display = dev_get_drvdata(dev);
+
+	mutex_lock(&display->display_lock);
+	spec_pdata = display->panel->spec_pdata;
+	if (spec_pdata == NULL) {
+		pr_err("%s: Invalid parameter\n", __func__);
+		mutex_unlock(&display->display_lock);
+		return -EINVAL;
+	}
+
+	if (sscanf(buf, "%d", &mode) < 0) {
+		pr_err("sscanf failed to set mode. keep current mode=%d\n",
+			spec_pdata->pre_sod_mode);
+		mutex_unlock(&display->display_lock);
+		return -EINVAL;
+	}
+
+	spec_pdata->pre_sod_mode = mode;
+	pr_info("%s: sod mode setting %d\n", __func__, spec_pdata->pre_sod_mode);
+	mutex_unlock(&display->display_lock);
+
+	return count;
+}
+
+static ssize_t dsi_panel_pre_sod_mode_show(struct device *dev,
+		struct device_attribute *attr, char *buf)
+{
+	struct panel_specific_pdata *spec_pdata = NULL;
+	struct dsi_display *display = dev_get_drvdata(dev);
+
+	spec_pdata = display->panel->spec_pdata;
+	if (spec_pdata == NULL) {
+		pr_err("%s: Invalid parameter\n", __func__);
+		return -EINVAL;
+	}
+
+	return scnprintf(buf, PAGE_SIZE, "pre_sod_mode = %u\n",
+				spec_pdata->pre_sod_mode);
+}
+
 static void update_res_buf(char *string)
 {
 	res_buf = krealloc(res_buf, buf_sz + strnlen(string, TMP_BUF_SZ) + 1,
@@ -1516,6 +1567,9 @@ static struct device_attribute panel_attributes[] = {
 	__ATTR(hbm_mode, S_IRUSR|S_IRGRP|S_IWUSR|S_IWGRP,
 		dsi_panel_driver_hbm_mode_show,
 		dsi_panel_driver_hbm_mode_store),
+	__ATTR(pre_sod_mode, (S_IRUSR|S_IRGRP|S_IWUSR|S_IWGRP),
+		dsi_panel_pre_sod_mode_show,
+		dsi_panel_pre_sod_mode_store),
 };
 
 static int dsi_panel_driver_panel_register_attributes(struct device *dev)

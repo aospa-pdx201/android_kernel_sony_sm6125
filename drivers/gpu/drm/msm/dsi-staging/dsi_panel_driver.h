@@ -160,6 +160,8 @@ struct panel_specific_pdata {
 	bool rst_b_seq;
 	bool rst_after_pon;
 
+	int aod_mode;
+	int pre_sod_mode;
 	int hbm_mode;
 
 	bool display_onoff_state;
